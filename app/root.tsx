@@ -3,6 +3,7 @@ import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration }
 import type { Route } from "./+types/root";
 import { Toaster } from "./components/ui/toaster/toaster";
 import colorSchemeApi from "@dazl/color-scheme/client?url";
+import { getSecurityHeaders } from "./lib/security-headers";
 
 import "./styles/reset.css";
 import "./styles/global.css";
@@ -16,6 +17,10 @@ import "./styles/theme.css";
 import { useColorScheme } from "@dazl/color-scheme/react";
 
 /* Dazl: imports placeholder */
+
+export function headers() {
+  return getSecurityHeaders();
+}
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -37,8 +42,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
         <Meta />
-        <script src={colorSchemeApi}></script>
+        <script src={colorSchemeApi} />
         <Links />
       </head>
       <body>
@@ -46,7 +52,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         {/* Dazl: after children placeholder */}
         <Toaster />
-        <ScrollRestoration />
+        <ScrollRestoration getKey={(location) => location.pathname} />
         <Scripts />
       </body>
     </html>
@@ -64,7 +70,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
-    details = error.status === 404 ? "The requested page could not be found." : error.statusText || details;
+    details = error.status === 404 ? "The requested page could not be found." : "Something went wrong. Please try again.";
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;

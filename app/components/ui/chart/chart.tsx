@@ -26,10 +26,21 @@ function useChart() {
   return context;
 }
 
-const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
-  const colorConfig = Object.entries(config).filter(([_, config]) => config.theme || config.color);
+const SAFE_CSS_COLOR = /^(#[0-9a-fA-F]{3,8}|rgba?\([\d\s.,/%]+\)|hsla?\([\d\s.,/%]+\)|[a-zA-Z][\w-]*)$/;
+const SAFE_CSS_IDENT = /^[a-zA-Z][\w-]*$/;
 
-  if (!colorConfig.length) return null;
+function sanitizeCssColor(value: string | undefined): string | null {
+  if (!value || !SAFE_CSS_COLOR.test(value.trim())) {
+    return null;
+  }
+  return value.trim();
+}
+
+const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
+  const colorConfig = Object.entries(config).filter(([_, itemConfig]) => itemConfig.theme || itemConfig.color);
+  const safeId = SAFE_CSS_IDENT.test(id) ? id : null;
+
+  if (!colorConfig.length || !safeId) return null;
 
   return (
     <style
@@ -37,10 +48,11 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
         __html: Object.entries(THEMES)
           .map(
             ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
+${prefix} [data-chart=${safeId}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
-    const color = itemConfig.theme?.[theme as keyof typeof THEMES] || itemConfig.color;
+    if (!SAFE_CSS_IDENT.test(key)) return null;
+    const color = sanitizeCssColor(itemConfig.theme?.[theme as keyof typeof THEMES] || itemConfig.color);
     return color ? `  --color-${key}: ${color};` : null;
   })
   .filter(Boolean)
@@ -110,7 +122,7 @@ const ChartTooltipContent: React.FC<
             {!hideIndicator && <div className={styles.tooltipIndicator} style={{ backgroundColor: item.color }} />}
             <span className={styles.tooltipName}>{config[item.dataKey]?.label ?? item.name}</span>
             <span className={styles.tooltipValue}>
-              {formatter?.(item.value, item.name, item, index, item.payload) ?? item.value.toLocaleString()}
+              {formatter?.(item.value, item.name, item, index, item.payload) ?? item.value.toLocaleString("en-US")}
             </span>
           </div>
         ))}

@@ -40,8 +40,8 @@ export const mockConversations: Conversation[] = [
     category: "Environment",
     participantCount: 234,
     messageCount: 1847,
-    expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    expiresAt: new Date("2026-08-21T12:00:00.000Z"),
+    createdAt: new Date("2026-08-14T12:00:00.000Z"),
     isLive: true,
     description:
       "A balanced discussion on climate change policies, exploring perspectives from different economic and environmental viewpoints.",
@@ -53,8 +53,8 @@ export const mockConversations: Conversation[] = [
     category: "Technology",
     participantCount: 567,
     messageCount: 3421,
-    expiresAt: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+    expiresAt: new Date("2026-08-23T12:00:00.000Z"),
+    createdAt: new Date("2026-08-16T12:00:00.000Z"),
     isLive: true,
     description: "Examining how remote work is reshaping our cities, communities, and work-life balance.",
     imageUrl: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=400&fit=crop",
@@ -65,8 +65,8 @@ export const mockConversations: Conversation[] = [
     category: "Education",
     participantCount: 189,
     messageCount: 892,
-    expiresAt: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+    expiresAt: new Date("2026-08-20T12:00:00.000Z"),
+    createdAt: new Date("2026-08-13T12:00:00.000Z"),
     isLive: true,
     description:
       "Teachers, parents, and students discuss what educational approaches are most effective in the modern world.",
@@ -78,8 +78,8 @@ export const mockConversations: Conversation[] = [
     category: "Health",
     participantCount: 412,
     messageCount: 2156,
-    expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+    expiresAt: new Date("2026-08-22T12:00:00.000Z"),
+    createdAt: new Date("2026-08-15T12:00:00.000Z"),
     isLive: true,
     description: "A global conversation about making healthcare accessible and affordable for everyone.",
     imageUrl: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=400&fit=crop",
@@ -93,8 +93,8 @@ export const mockArticles: Article[] = [
     summary:
       "After a week-long conversation involving 456 participants, a balanced perspective emerged on transitioning to renewable energy while maintaining economic stability.",
     category: "Environment",
-    conversationId: "conv-123",
-    publishedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+    conversationId: "1",
+    publishedAt: new Date("2026-08-17T12:00:00.000Z"),
     readTime: 8,
     imageUrl: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&h=400&fit=crop",
     viewCount: 12453,
@@ -105,8 +105,8 @@ export const mockArticles: Article[] = [
     summary:
       "A diverse group of 789 participants discussed data privacy, revealing surprising agreement on fundamental rights and practical concerns.",
     category: "Technology",
-    conversationId: "conv-124",
-    publishedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    conversationId: "2",
+    publishedAt: new Date("2026-08-14T12:00:00.000Z"),
     readTime: 6,
     imageUrl: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=400&fit=crop",
     viewCount: 8921,
@@ -117,8 +117,8 @@ export const mockArticles: Article[] = [
     summary:
       "Over 300 voices shared experiences and solutions for improving mental health support systems in communities worldwide.",
     category: "Health",
-    conversationId: "conv-125",
-    publishedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    conversationId: "4",
+    publishedAt: new Date("2026-08-12T12:00:00.000Z"),
     readTime: 10,
     imageUrl: "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=800&h=400&fit=crop",
     viewCount: 15678,
@@ -129,8 +129,8 @@ export const mockArticles: Article[] = [
     summary:
       "Citizens, planners, and policymakers found common ground on creating more pedestrian-friendly urban environments.",
     category: "Society",
-    conversationId: "conv-126",
-    publishedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+    conversationId: "2",
+    publishedAt: new Date("2026-08-09T12:00:00.000Z"),
     readTime: 7,
     imageUrl: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop",
     viewCount: 6234,
@@ -193,3 +193,23 @@ export const mockCommunities: Community[] = [
     imageUrl: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=400&h=300&fit=crop",
   },
 ];
+
+export function getConversationById(id: string): Conversation | undefined {
+  return mockConversations.find((conversation) => conversation.id === id);
+}
+
+export function getArticleById(id: string): Article | undefined {
+  return mockArticles.find((article) => article.id === id);
+}
+
+export function getCommunityById(id: string): Community | undefined {
+  return mockCommunities.find((community) => community.id === id);
+}
+
+export function getArticlesForConversation(conversationId: string): Article[] {
+  return mockArticles.filter((article) => article.conversationId === conversationId);
+}
+
+export function getConversationsForCategory(category: string): Conversation[] {
+  return mockConversations.filter((conversation) => conversation.category === category);
+}

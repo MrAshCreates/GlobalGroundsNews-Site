@@ -38,6 +38,7 @@ export default function Conversations() {
         <div className={styles.filters}>
           {categories.map((category) => (
             <button
+              type="button"
               key={category}
               className={`${styles.filterButton} ${selectedCategory === category ? styles.active : ""}`}
               onClick={() => setSelectedCategory(category)}

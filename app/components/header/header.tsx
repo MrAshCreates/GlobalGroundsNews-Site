@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router";
 import { Globe, MessageSquare, FileText, Users, User } from "lucide-react";
 import { Button } from "../ui/button/button";
+import { ColorSchemeToggle } from "../ui/color-scheme-toggle/color-scheme-toggle";
 import styles from "./header.module.css";
 import classNames from "classnames";
 
@@ -44,8 +45,9 @@ export function Header({ className }: { className?: string }) {
         </nav>
 
         <div className={styles.actions}>
+          <ColorSchemeToggle />
           <Link to="/profile">
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" aria-label="Open profile">
               <User className={styles.navIcon} />
             </Button>
           </Link>

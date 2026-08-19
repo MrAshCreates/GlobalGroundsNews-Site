@@ -1,6 +1,10 @@
 import { Link } from "react-router";
 import { Users, MessageSquare, Clock } from "lucide-react";
+import classNames from "classnames";
 import type { Conversation } from "../../data/mock-data";
+import { formatClosesOn, formatCount, formatTimeRemaining } from "../../lib/format";
+import { useMounted } from "../../hooks/use-mounted";
+import { SafeImage } from "../safe-image/safe-image";
 import styles from "./conversation-card.module.css";
 
 interface ConversationCardProps {
@@ -12,23 +16,25 @@ interface ConversationCardProps {
   className?: string;
 }
 
-function formatTimeRemaining(expiresAt: Date): string {
-  const now = new Date();
-  const diff = expiresAt.getTime() - now.getTime();
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+function ConversationTimer({ expiresAt }: { expiresAt: Date }) {
+  const mounted = useMounted();
+  const label = mounted ? formatTimeRemaining(expiresAt, new Date()) : formatClosesOn(expiresAt);
 
-  if (days > 0) {
-    return `${days}d ${hours}h remaining`;
-  }
-  return `${hours}h remaining`;
+  return (
+    <div className={styles.timer}>
+      <Clock className={styles.timerIcon} />
+      {label}
+    </div>
+  );
 }
 
 export function ConversationCard({ conversation, className }: ConversationCardProps) {
   return (
-    <Link to={`/conversations/${conversation.id}`} className={styles.card}>
+    <Link to={`/conversations/${conversation.id}`} className={classNames(styles.card, className)}>
       <div className={styles.imageContainer}>
-        {conversation.imageUrl && <img src={conversation.imageUrl} alt={conversation.title} className={styles.image} />}
+        {conversation.imageUrl && (
+          <SafeImage src={conversation.imageUrl} alt={conversation.title} className={styles.image} />
+        )}
         {conversation.isLive && (
           <div className={styles.liveBadge}>
             <span className={styles.liveDot} />
@@ -45,18 +51,15 @@ export function ConversationCard({ conversation, className }: ConversationCardPr
         <div className={styles.stats}>
           <div className={styles.stat}>
             <Users className={styles.statIcon} />
-            {conversation.participantCount.toLocaleString()}
+            {formatCount(conversation.participantCount)}
           </div>
           <div className={styles.stat}>
             <MessageSquare className={styles.statIcon} />
-            {conversation.messageCount.toLocaleString()}
+            {formatCount(conversation.messageCount)}
           </div>
         </div>
 
-        <div className={styles.timer}>
-          <Clock className={styles.timerIcon} />
-          {formatTimeRemaining(conversation.expiresAt)}
-        </div>
+        <ConversationTimer expiresAt={conversation.expiresAt} />
       </div>
     </Link>
   );
