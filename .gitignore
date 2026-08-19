@@ -9,3 +9,6 @@
 .env
 
 .netlify
+.wrangler/
+.dev.vars
+worker-configuration.d.ts
