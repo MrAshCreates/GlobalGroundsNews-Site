@@ -33,7 +33,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.53.0",
+    "@cloudflare/vite-plugin": "^1.62.5",
     "@dazl-lib/radix-ui": "^0.1.0",
     "@dazl/dev": "^1.7.0",
     "@react-router/dev": "^7.18.2",
@@ -43,7 +43,7 @@
     "typescript": "~5.9.3",
     "vite": "^7.3.6",
     "vite-tsconfig-paths": "^5.1.4",
-    "wrangler": "^4.124.0"
+    "wrangler": "^4.147.0"
   },
   "overrides": {
     "react-router": "^7.18.2",
